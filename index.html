@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <main class="app">
+    <div class="app-header">
+      <h1>할 일 목록</h1>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="테마 전환">🌙</button>
+    </div>
+    <form id="todo-form">
+      <input id="todo-input" type="text" placeholder="할 일을 입력하세요" autocomplete="off" required>
+      <button type="submit">추가</button>
+    </form>
+    <div class="list-meta">
+      <p id="todo-count" class="count"></p>
+      <button type="button" id="copy-btn" class="copy">복사</button>
+    </div>
+    <ul id="todo-list"></ul>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
