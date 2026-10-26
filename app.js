@@ -3,10 +3,27 @@ const input = document.getElementById('todo-input');
 const list = document.getElementById('todo-list');
 const countEl = document.getElementById('todo-count');
 
-let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem('todos') || '[]');
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+let todos = load();
 
 function save() {
-  localStorage.setItem('todos', JSON.stringify(todos));
+  try {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  } catch {
+    // 저장소가 가득 찼거나 차단된 경우: 메모리 상태로 계속 동작
+  }
+}
+
+function nextId() {
+  return todos.reduce((max, t) => Math.max(max, Number(t.id) || 0), 0) + 1;
 }
 
 function render() {
@@ -36,7 +53,7 @@ function render() {
 }
 
 function addTodo(text) {
-  todos.push({ id: Date.now(), text, done: false });
+  todos.push({ id: nextId(), text, done: false });
   save();
   render();
 }
@@ -110,7 +127,11 @@ function updateThemeBtn() {
 themeBtn.addEventListener('click', () => {
   const next = isDark() ? 'light' : 'dark';
   document.documentElement.dataset.theme = next;
-  localStorage.setItem('theme', next);
+  try {
+    localStorage.setItem('theme', next);
+  } catch {
+    // 저장 실패해도 현재 세션의 테마는 유지
+  }
   updateThemeBtn();
 });
 
